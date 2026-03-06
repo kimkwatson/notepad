@@ -4,7 +4,7 @@ const express_1 = require("express");
 const notes_js_1 = require("../controllers/notes.js");
 const router = (0, express_1.Router)();
 // get all notes
-router.get("/notes", notes_js_1.getAllNotes);
+router.get("/", notes_js_1.getAllNotes);
 // get note by id
 //router.get("/:id", getNoteById);
 // create new note

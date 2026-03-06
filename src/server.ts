@@ -1,16 +1,19 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
+
 import notesRouter from "./routes/notes.js";
 import { initDb } from "./db/connect.js";
 
 const app = express();
 app.use(express.json());
 
+// routes
+app.use(express.static("public"));
 app.use("/notes", notesRouter);
 
-app.get("/health", (req, res) => {
-  res.json({ ok: true });
-});
-
+// port variable
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 // initialize mongodb
