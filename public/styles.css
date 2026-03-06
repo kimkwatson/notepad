@@ -29,7 +29,6 @@ h2 {
 }
 
 #my-notes {
-    border: 5px solid darkslategray;
     background-color: whitesmoke;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: list;
@@ -54,20 +53,18 @@ h2 {
 }
 
 #note-current {
-    border: 5px solid darkslategray;
+    background-color: #FFF9A6;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: current;
 }
 
 #note-actions {
-    border: 5px solid darkslategray;
     background-color: whitesmoke;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: actions;
 }
 
 #footer {
-    border: 5px solid darkslategray;
     background-color: lightgray;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: footer;
