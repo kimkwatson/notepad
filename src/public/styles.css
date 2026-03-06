@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    display: grid;
+    grid-template-areas: 
+        "list actions actions"
+        "list current current"
+        "list current current"
+        "list current current"
+        "footer footer footer";
+    height: 100vh;
+    margin: 0;
+}
+
+#note-list {
+    border: 5px solid blue;
+    grid-area: list;
+}
+
+#note-current {
+    border: 5px solid yellow;
+    grid-area: current;
+}
+
+#note-actions {
+    border: 5px solid green;
+    grid-area: actions;
+}
+
+#footer {
+    border: 5px solid black;
+    grid-area: footer;
+}
