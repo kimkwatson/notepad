@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Handlee&family=Homemade+Apple&family=Walter+Turncoat&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -7,13 +9,17 @@ body {
 }
 
 main {
-    width: 50vw;
+    width: clamp(400px, 50vw, 1200px);
     margin: 0 auto;
     min-height: 100vh;
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr auto;
 
     grid-template-areas: 
         "list actions actions"
+        "list current current"
+        "list current current"
         "list current current"
         "list current current"
         "list current current"
@@ -24,6 +30,7 @@ main {
 h2 {
     margin: 0;
     padding: 1rem;
+    font-family: "Walter Turncoat", cursive;
     font-size: 2.5rem;
     border-bottom: 1px solid lightgray;
 }
@@ -37,25 +44,41 @@ h2 {
 #note-list {
     font-size: 2rem;
     text-decoration: none;
-    color: seagreen;
-    padding: 1.5rem;
+    padding: 0;
     margin: 0;
     list-style-type: none;
 }
 
 #note-list a {
     text-decoration: none;
-    color: seagreen;
+    color: #ff7096;
+    font-size: 1.25rem;
 }
 
-#note-list:hover {
+#note-list li {
+    border-bottom: 1px solid lightgray;
+    margin: .25rem;
+    padding: 1rem;
+    font-size: 1rem;
+    font-family: "Walter Turncoat", cursive;
+}
+
+#note-list li:hover {
     background-color: aliceblue;
+    border: 1px solid lightgray;
+    border-radius: 15px;
 }
 
 #note-current {
     background-color: #FFF9A6;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: current;
+    font-family: "Handlee", cursive;
+}
+
+#note-current p {
+    padding: 1rem;
+    font-size: 1.5rem;
 }
 
 #note-actions {
@@ -64,8 +87,49 @@ h2 {
     grid-area: actions;
 }
 
+#action-icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem;
+}
+
+#action-icons div {
+    width: 45px;
+    height: 45px;
+}
+
+#action-icons svg:hover {
+    color: #ff7096;
+    cursor: pointer;
+}
+
 #footer {
     background-color: lightgray;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: footer;
+    font-family: "Homemade Apple", cursive;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+@media (max-width: 1200px) {
+
+    main {
+        display: block;
+        width: 100vw;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    #note-current p {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+    footer, #mynotes, #note-current, #note-actions {
+        box-shadow: none;
+    }
 }

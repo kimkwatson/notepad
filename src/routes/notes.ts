@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllNotes } from "../controllers/notes.js";
+import { getAllNotes, getNoteById } from "../controllers/notes.js";
 
 const router = Router();
 
@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", getAllNotes);
 
 // get note by id
-//router.get("/:id", getNoteById);
+router.get("/:id", getNoteById);
 
 // create new note
 //router.post("/", createNewNote);

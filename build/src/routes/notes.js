@@ -6,7 +6,7 @@ const router = (0, express_1.Router)();
 // get all notes
 router.get("/", notes_js_1.getAllNotes);
 // get note by id
-//router.get("/:id", getNoteById);
+router.get("/:id", notes_js_1.getNoteById);
 // create new note
 //router.post("/", createNewNote);
 // edit note by id
