@@ -51,7 +51,8 @@ h2 {
 
 #note-list a {
     text-decoration: none;
-    color: #ff7096;
+    color: #85a6c9;
+    /*color: #ff7096;*/
     font-size: 1.25rem;
 }
 
@@ -100,7 +101,8 @@ h2 {
 }
 
 #action-icons svg:hover {
-    color: #ff7096;
+    color: #85a6c9;
+    /*color: #ff7096;*/
     cursor: pointer;
 }
 
