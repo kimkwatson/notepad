@@ -9,6 +9,9 @@ function renderNoteList(notes) {
     return;
   }
 
+  // empty list
+  noteList.innerHTML = "";
+
   // sort notes by date
   notes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 

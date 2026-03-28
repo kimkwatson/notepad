@@ -21,9 +21,12 @@ export async function getAllNotes(req: Request, res: Response): Promise<void> {
 }
 
 // function to get one note from the database by ID
-export async function getNoteById(req: Request, res: Response): Promise<void> {
+export async function getNoteById(
+  req: Request<{ id: string }, {}, { title: string; content: string }>,
+  res: Response
+): Promise<void> {
     try {
-      const id = req.params.id as string;
+      const id = req.params.id;
 
         if (!ObjectId.isValid(id)) {
             res.status(400).json({ message: "Invalid note id format." });
@@ -48,7 +51,10 @@ export async function getNoteById(req: Request, res: Response): Promise<void> {
 };
 
 // function to create a new note
-export async function createNote(req: Request, res: Response): Promise<void> {
+export async function createNote(
+  req: Request<{ id: string }, {}, { title: string; content: string; date: string }>,
+  res: Response
+): Promise<void> {
   try {
     const {title, content, date } = req.body;
 
@@ -72,5 +78,51 @@ export async function createNote(req: Request, res: Response): Promise<void> {
     });
   } catch (error) {
 
+  }
+}
+
+// function to edit a note
+export async function editNote(
+    req: Request<{ id: string }, {}, { title: string; content: string }>,
+    res: Response
+): Promise<void> {
+  try {
+    const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Invalid note id format." });
+      return;
+    }
+
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      res.status(400).json({ message: "Title and content are required." });
+      return;
+    }
+
+    const db = getDb();
+
+    const result = await db.collection("notepad").updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          title,
+          content,
+          date: new Date().toISOString()
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      res.status(404).json({ message: "Note not found." });
+      return;
+    }
+
+    res.status(200).json({ message: "Note updated successfully." });
+
+  } catch (error) {
+    console.error("Error updating note:", error);
+    res.status(500).json({ message: "Failed to update note." });
   }
 }
