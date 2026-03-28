@@ -1,3 +1,5 @@
+let currentNoteId = null;
+
 /*** Render list of notes in left panel ***/
 function renderNoteList(notes) {
   const noteList = document.querySelector("#note-list");
@@ -41,16 +43,19 @@ function renderNoteList(notes) {
 
 /*** Display selected note in right panel ***/
 function renderCurrentNote(note) {
-  const title = document.querySelector("#note-current h2");
-  const content = document.querySelector("#note-current p");
+  const title = document.querySelector("#note-card h2");
+  const content = document.querySelector("#note-card p");
 
   if (!title || !content) {
-    console.error("Could not find #note-current");
+    console.error("Could not find #note-card elements");
     return;
   }
 
   title.textContent = note.title;
   content.textContent = note.content;
+
+  // store current note id globally
+  currentNoteId = note._id;
 }
 
 /*** Display current note when clicked from left panel list */
@@ -95,6 +100,54 @@ async function loadNoteById(id) {
     console.error("Error loading note:", error);
   }
 }
+
+/*** Edit Note */
+const editBtn = document.getElementById("edit-btn");
+
+editBtn?.addEventListener("click", () => {
+  const title = document.querySelector("#note-card h2");
+  const content = document.querySelector("#note-card p");
+
+  if (!title || !content) return;
+
+  const currentTitle = title.textContent;
+  const currentContent = content.textContent;
+
+  const noteCard = document.getElementById("note-card");
+
+  if (!noteCard) return;
+
+  noteCard.innerHTML = `
+    <input id="edit-title" value="${currentTitle}" />
+    <textarea id="edit-content">${currentContent}</textarea>
+    <button id="save-btn">Save</button>
+  `;
+
+  const saveBtn = document.getElementById("save-btn");
+
+  saveBtn?.addEventListener("click", async () => {
+    const newTitle = document.getElementById("edit-title").value;
+    const newContent = document.getElementById("edit-content").value;
+
+    try {
+      await fetch(`/notes/${currentNoteId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: newTitle,
+          content: newContent
+        })
+      });
+
+      loadNotes();
+      loadNoteById(currentNoteId);
+    } catch (error) {
+      console.error("Error updating note:", error);
+    }
+  })
+});
 
 const noteList = document.querySelector("#note-list");
 noteList?.addEventListener("click", handleNoteClick);

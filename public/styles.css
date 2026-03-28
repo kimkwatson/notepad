@@ -70,14 +70,14 @@ h2 {
     border-radius: 15px;
 }
 
-#note-current {
+#note-card {
     background-color: #FFF9A6;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     grid-area: current;
     font-family: "Handlee", cursive;
 }
 
-#note-current p {
+#note-card p {
     padding: 1rem;
     font-size: 1.5rem;
 }
@@ -126,12 +126,12 @@ h2 {
         font-size: 1.5rem;
     }
 
-    #note-current p {
+    #note-card p {
     padding: 1rem;
     font-size: 1rem;
 }
 
-    footer, #mynotes, #note-current, #note-actions {
+    footer, #mynotes, #note-card, #note-actions {
         box-shadow: none;
     }
 }
