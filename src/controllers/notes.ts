@@ -8,6 +8,7 @@ interface Note {
   date: string;
 }
 
+// function to get all notes from the database
 export async function getAllNotes(req: Request, res: Response): Promise<void> {
   try {
     const db = getDb();
@@ -19,6 +20,7 @@ export async function getAllNotes(req: Request, res: Response): Promise<void> {
   }
 }
 
+// function to get one note from the database by ID
 export async function getNoteById(req: Request, res: Response): Promise<void> {
     try {
       const id = req.params.id as string;
@@ -29,7 +31,7 @@ export async function getNoteById(req: Request, res: Response): Promise<void> {
         }
 
         const note = await getDb()
-            .collection("notepad")
+            .collection<Note>("notepad")
             .findOne({ _id: new ObjectId(id) });
 
         if (!note) {
@@ -44,3 +46,31 @@ export async function getNoteById(req: Request, res: Response): Promise<void> {
         res.status(500).json({ message: "An error occurred while retrieving the note." });
     }
 };
+
+// function to create a new note
+export async function createNote(req: Request, res: Response): Promise<void> {
+  try {
+    const {title, content, date } = req.body;
+
+    if (!title || !content || !date) {
+      res.status(400).json({ message: "Title, content, and date are required." });
+      return;
+    }
+
+    const newNote: Note = {
+      title,
+      content,
+      date
+    };
+
+    const db = getDb();
+    const result = await db.collection<Note>("notepad").insertOne(newNote);
+
+    res.status(201).json({
+      message: "Note created successfully.",
+      id: result.insertedId
+    });
+  } catch (error) {
+
+  }
+}
