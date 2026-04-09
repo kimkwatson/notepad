@@ -144,7 +144,7 @@ export async function deleteNote(
     .deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
-      res.status(404).json({ message: "Note note found." });
+      res.status(404).json({ message: "Note not found." });
       return;
     }
 
