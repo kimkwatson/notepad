@@ -8,9 +8,9 @@ router.get("/", notes_js_1.getAllNotes);
 // get note by id
 router.get("/:id", notes_js_1.getNoteById);
 // create new note
-//router.post("/", createNewNote);
+router.post("/", notes_js_1.createNote);
 // edit note by id
-//router.put("/:id", editNoteById);
+router.put("/:id", notes_js_1.editNote);
 // delete note by id
 //router.delete("/:id", deleteNoteById);
 exports.default = router;

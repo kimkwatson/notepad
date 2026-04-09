@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "outDir": "./public/build",
+    "rootDir": "./public",
+    "lib": ["DOM", "ES2022"],
+    "types": [],
+    "skipLibCheck": true
+  },
+  "include": ["public/notes.ts"]
+}

@@ -11,6 +11,7 @@ app.use(express.json());
 
 // routes
 app.use(express.static("public"));
+app.use("/build", express.static("build"));
 app.use("/notes", notesRouter);
 
 // port variable

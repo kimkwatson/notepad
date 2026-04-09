@@ -106,6 +106,48 @@ h2 {
     cursor: pointer;
 }
 
+/* New/Edit Note Styles */
+#new-note, #new-title, #new-content,
+#edit-note, #edit-title, #edit-content {
+    background-color: #FFF9A6;
+    border: none;
+    font-family: "Handlee", cursive;
+    font-size: 1.5rem;
+}
+
+#new-note, #edit-note {
+    padding: 1rem;
+}
+
+#new-title, #edit-title {
+    margin-top: 1rem;
+    display:block;
+    width:100%;
+    margin-bottom:10px;
+}
+
+#new-content, #edit-content {
+    display:block;
+    width:100%;
+    height:55vh;
+    margin-bottom:10px;
+}
+
+#save-new-btn, #save-edit-btn {
+    border: none;
+    background: none;
+    font-size: 1.25rem;
+    font-family: "Walter Turncoat", cursive;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+#save-new-btn:hover, #save-edit-btn:hover {
+    background-color: aliceblue;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+}
+
 #footer {
     background-color: lightgray;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);

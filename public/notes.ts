@@ -1,7 +1,14 @@
-let currentNoteId = null;
+let currentNoteId: string | null = null;
+
+interface Note {
+  _id: string;
+  title: string;
+  content: string;
+  date: string;
+}
 
 /*** Render list of notes in left panel ***/
-function renderNoteList(notes) {
+function renderNoteList(notes: Note[]) {
   const noteList = document.querySelector("#note-list");
 
   if (!noteList) {
@@ -13,10 +20,10 @@ function renderNoteList(notes) {
   noteList.innerHTML = "";
 
   // sort notes by date
-  notes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  notes.sort((a: Note, b: Note) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // create a list item for each note
-  notes.forEach((note) => {
+  notes.forEach((note: Note) => {
     const li = document.createElement("li");
 
     const link = document.createElement("a");
@@ -45,24 +52,35 @@ function renderNoteList(notes) {
 }
 
 /*** Display selected note in right panel ***/
-function renderCurrentNote(note) {
-  const title = document.querySelector("#note-card h2");
-  const content = document.querySelector("#note-card p");
+function renderCurrentNote(note: Note) {
+  const noteCard = document.getElementById("note-card");
+
+  if (!noteCard) {
+    console.error("Could not find #note-card");
+    return;
+  }
+
+  noteCard.innerHTML = `
+    <h2></h2>
+    <p></p>
+  `;
+
+  const title = noteCard.querySelector("h2");
+  const content = noteCard.querySelector("p");
 
   if (!title || !content) {
-    console.error("Could not find #note-card elements");
+    console.error("Could not create note display elements");
     return;
   }
 
   title.textContent = note.title;
   content.textContent = note.content;
 
-  // store current note id globally
   currentNoteId = note._id;
 }
 
 /*** Display current note when clicked from left panel list */
-async function handleNoteClick(event) {
+async function handleNoteClick(event: Event) {
   const target = event.target;
 
   if (!(target instanceof HTMLElement)) return;
@@ -94,7 +112,7 @@ async function loadNotes() {
   }
 }
 
-async function loadNoteById(id) {
+async function loadNoteById(id: string) {
   try {
     const response = await fetch(`/notes/${id}`);
     const note = await response.json();
@@ -103,6 +121,65 @@ async function loadNoteById(id) {
     console.error("Error loading note:", error);
   }
 }
+
+/*** Create New Note */
+const createBtn = document.getElementById("new-btn");
+
+createBtn?.addEventListener("click", () => {
+  const noteCard = document.getElementById("note-card");
+  if (!noteCard) return;
+
+  currentNoteId = null;
+
+  noteCard.innerHTML = `
+    <h2>New Note</h2>
+    <div id="new-note">
+    <input id="new-title" placeholder="Title"/>
+    <textarea id="new-content" placeholder="Content"></textarea>
+    <button id="save-new-btn">Create Note</button>
+    </div>
+  `;
+
+  const createSaveBtn = document.getElementById("save-new-btn");
+
+  createSaveBtn?.addEventListener("click", async () => {
+    const titleInput = document.getElementById("new-title") as HTMLInputElement | null;
+    const contentInput = document.getElementById("new-content") as HTMLTextAreaElement | null;
+
+    const title = titleInput?.value.trim();
+    const content = contentInput?.value.trim();
+
+    if (!title || !content) {
+      alert("Title and content are required.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          date: new Date().toISOString()
+        })
+      });
+
+      console.log("POST response status:", response.status);
+      const result = await response.json();
+
+      await loadNotes();
+
+      if (result.id) {
+        await loadNoteById(result.id);
+      }
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
+  });
+});
 
 /*** Edit Note */
 const editBtn = document.getElementById("edit-btn");
@@ -121,16 +198,24 @@ editBtn?.addEventListener("click", () => {
   if (!noteCard) return;
 
   noteCard.innerHTML = `
+  <h2>Edit Note</h2>  
+  <div id="edit-note">
     <input id="edit-title" value="${currentTitle}" />
     <textarea id="edit-content">${currentContent}</textarea>
-    <button id="save-btn">Save</button>
+    <button id="save-edit-btn">Save Changes</button>
+    </div>
   `;
 
-  const saveBtn = document.getElementById("save-btn");
+  const saveBtn = document.getElementById("save-edit-btn");
 
   saveBtn?.addEventListener("click", async () => {
-    const newTitle = document.getElementById("edit-title").value;
-    const newContent = document.getElementById("edit-content").value;
+    const editTitleInput = document.getElementById("edit-title") as HTMLInputElement | null;
+    const editContentInput = document.getElementById("edit-content") as HTMLTextAreaElement | null;
+
+    if(!editTitleInput || !editContentInput) return;
+
+    const newTitle = editTitleInput.value;
+    const newContent = editContentInput.value;
 
     try {
       await fetch(`/notes/${currentNoteId}`, {
@@ -144,8 +229,11 @@ editBtn?.addEventListener("click", () => {
         })
       });
 
-      loadNotes();
-      loadNoteById(currentNoteId);
+      await loadNotes();
+      if (currentNoteId) {
+        loadNoteById(currentNoteId);
+      }
+
     } catch (error) {
       console.error("Error updating note:", error);
     }

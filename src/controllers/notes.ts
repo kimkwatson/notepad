@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import {ObjectId } from "mongodb";
 import { getDb } from "../db/connect.js";
+import { NoteItem } from "../models/NoteItem.js";
 
 interface Note {
+  _id?: ObjectId;
   title: string;
   content: string;
   date: string;
@@ -63,11 +65,7 @@ export async function createNote(
       return;
     }
 
-    const newNote: Note = {
-      title,
-      content,
-      date
-    };
+    const newNote = new NoteItem(title, content, date);
 
     const db = getDb();
     const result = await db.collection<Note>("notepad").insertOne(newNote);
@@ -77,7 +75,8 @@ export async function createNote(
       id: result.insertedId
     });
   } catch (error) {
-
+    console.error("Error creating note:", error);
+    res.status(500).json({ message: "Failed to create note." });
   }
 }
 

@@ -12,6 +12,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // routes
 app.use(express_1.default.static("public"));
+app.use("/build", express_1.default.static("build"));
 app.use("/notes", notes_js_1.default);
 // port variable
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
