@@ -240,6 +240,38 @@ editBtn?.addEventListener("click", () => {
   })
 });
 
+/*** Delete Note */
+const deleteBtn = document.getElementById("delete-btn");
+
+deleteBtn?.addEventListener("click", async () => {
+  if (!currentNoteId) return;
+
+  const confirmDelete = confirm("Are you sure you want to delete this note?");
+  if (!confirmDelete) return;
+
+  try {
+    await fetch(`/notes/${currentNoteId}`, {
+      method: "DELETE"
+    });
+
+    await loadNotes();
+
+    // reset UI
+    const noteCard = document.getElementById("note-card");
+    if (noteCard) {
+      noteCard.innerHTML = `
+        <h2>Notepad</h2>
+        <p>Select a note or create a new one.</p>
+      `;
+    }
+
+    currentNoteId = null;
+
+  } catch (error) {
+    console.error("Error deleting note:", error);
+  }
+});
+
 const noteList = document.querySelector("#note-list");
 noteList?.addEventListener("click", handleNoteClick);
 

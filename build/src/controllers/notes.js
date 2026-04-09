@@ -4,6 +4,7 @@ exports.getAllNotes = getAllNotes;
 exports.getNoteById = getNoteById;
 exports.createNote = createNote;
 exports.editNote = editNote;
+exports.deleteNote = deleteNote;
 const mongodb_1 = require("mongodb");
 const connect_js_1 = require("../db/connect.js");
 const NoteItem_js_1 = require("../models/NoteItem.js");
@@ -93,5 +94,27 @@ async function editNote(req, res) {
     catch (error) {
         console.error("Error updating note:", error);
         res.status(500).json({ message: "Failed to update note." });
+    }
+}
+// function to delete a note
+async function deleteNote(req, res) {
+    try {
+        const id = req.params.id;
+        if (!mongodb_1.ObjectId.isValid(id)) {
+            res.status(400).json({ message: "Invalid note id format." });
+            return;
+        }
+        const result = await (0, connect_js_1.getDb)()
+            .collection("notepad")
+            .deleteOne({ _id: new mongodb_1.ObjectId(id) });
+        if (result.deletedCount === 0) {
+            res.status(404).json({ message: "Note note found." });
+            return;
+        }
+        res.status(200).json({ message: "Note deleted successfully." });
+    }
+    catch (error) {
+        console.error("Error deleting note:", error);
+        res.status(500).json({ message: "Failed to delete note." });
     }
 }

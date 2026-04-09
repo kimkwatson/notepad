@@ -125,3 +125,33 @@ export async function editNote(
     res.status(500).json({ message: "Failed to update note." });
   }
 }
+
+// function to delete a note
+export async function deleteNote(
+  req: Request<{ id: string }>,
+  res: Response
+): Promise<void> {
+  try {
+    const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Invalid note id format." });
+      return;
+    }
+
+    const result = await getDb()
+    .collection("notepad")
+    .deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: "Note note found." });
+      return;
+    }
+
+    res.status(200).json({ message: "Note deleted successfully." });
+
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    res.status(500).json({ message: "Failed to delete note." });
+  }
+}
