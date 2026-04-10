@@ -108,7 +108,7 @@ async function deleteNote(req, res) {
             .collection("notepad")
             .deleteOne({ _id: new mongodb_1.ObjectId(id) });
         if (result.deletedCount === 0) {
-            res.status(404).json({ message: "Note note found." });
+            res.status(404).json({ message: "Note not found." });
             return;
         }
         res.status(200).json({ message: "Note deleted successfully." });
